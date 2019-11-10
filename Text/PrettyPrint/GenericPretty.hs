@@ -29,9 +29,10 @@ module Text.PrettyPrint.GenericPretty
 -- Avoid name clash with Prelude.<> exported by post-SMP versions of base.
 import Prelude hiding ( (<>) )
 #endif
-import Data.List
-import GHC.Generics
 import Data.Char
+import Data.List
+import Data.Text (Text, unpack)
+import GHC.Generics
 import Text.PrettyPrint
 
 -- | The class 'Out' is the equivalent of 'Prelude.Show'
@@ -406,6 +407,10 @@ instance Out Bool where
     doc True = text "True"
     doc False = text "False"
     docPrec _ = doc
+
+instance Out Text where
+  doc = doc . unpack
+  docPrec n = docPrec n . unpack
 
 instance Out a => Out (Maybe a) where
   docPrec n Nothing = text "Nothing"
